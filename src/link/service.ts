@@ -1,19 +1,26 @@
+import { APP_ORIGIN } from "../config.ts";
 import { Link } from "./domain.ts";
 
-const originalToShort = new Map<string, string>();
-const shortToOriginal = new Map<string, string>();
+const originalToShort = new Map<string, Link>();
+const shortToOriginal = new Map<string, Link>();
 
 export function createLink(originalURL: string): Link {
-  const domain = Deno.env.get("SHORT_ORIGIN")!;
+  const link = new Link(APP_ORIGIN, originalURL);
 
-  const link = new Link(domain, originalURL);
-
-  originalToShort.set(link.originalURL, link.shortURL);
-  shortToOriginal.set(link.shortURL, link.originalURL);
+  originalToShort.set(link.originalURL, link);
+  shortToOriginal.set(link.shortURL, link);
 
   return link;
 }
 
-export function getOriginalURL(shortURL: string): string | null {
+export function getLinkFromShortURL(shortURL: string): Link | null {
   return shortToOriginal.get(shortURL) ?? null;
+}
+
+export function getLinkFromShortPathname(shortPathname: string): Link | null {
+  return shortToOriginal.get(new URL(shortPathname, APP_ORIGIN).toString()) ?? null;
+}
+
+export function getAllLinks(): Link[] {
+  return Array.from(shortToOriginal.values());
 }

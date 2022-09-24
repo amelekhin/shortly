@@ -1,6 +1,5 @@
 import { Application } from "oak";
-import { Router } from "oak";
-import { PORT } from "./config.ts";
+import { APP_PORT } from "./config.ts";
 import { linkRouter } from "./link/router.ts";
 
 const app = new Application();
@@ -20,15 +19,7 @@ app.use(async (ctx, next) => {
   ctx.response.headers.set("X-Response-Time", `${ms}ms`);
 });
 
-const mainRouter = new Router();
-mainRouter.get("/", (ctx) => {
-  ctx.response.body = "";
-});
-
-app.use(mainRouter.routes());
-app.use(mainRouter.allowedMethods());
-
 app.use(linkRouter.routes());
 app.use(linkRouter.allowedMethods());
 
-await app.listen({ port: PORT });
+await app.listen({ port: APP_PORT });
