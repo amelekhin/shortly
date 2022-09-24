@@ -1,10 +1,10 @@
 export class Link {
-  public originalUrl: string;
-  public shortUrl: string;
+  public originalURL: string;
+  public shortURL: string;
 
-  public constructor(shortOrigin: string, originalUrl: string) {
-    this.originalUrl = new URL(originalUrl).toString();
-    this.shortUrl = Link.getRandomUrl(shortOrigin);
+  public constructor(shortOrigin: string, originalURL: string) {
+    this.originalURL = new URL(originalURL).toString();
+    this.shortURL = Link.getRandomUrl(shortOrigin);
   }
 
   private static getRandomUrl(domain: string): string {
