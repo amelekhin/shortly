@@ -1,8 +1,9 @@
-import "dotenv/load.ts";
 import { Application } from "oak";
+import { Router } from "oak";
+import { PORT } from "./config.ts";
+import { linkRouter } from "./link/router.ts";
 
 const app = new Application();
-const port = Number(Deno.env.get("PORT"));
 
 // Logger
 app.use(async (ctx, next) => {
@@ -19,8 +20,15 @@ app.use(async (ctx, next) => {
   ctx.response.headers.set("X-Response-Time", `${ms}ms`);
 });
 
-app.use((ctx) => {
-  ctx.response.body = "Hello World!";
+const mainRouter = new Router();
+mainRouter.get("/", (ctx) => {
+  ctx.response.body = "";
 });
 
-await app.listen({ port });
+app.use(mainRouter.routes());
+app.use(mainRouter.allowedMethods());
+
+app.use(linkRouter.routes());
+app.use(linkRouter.allowedMethods());
+
+await app.listen({ port: PORT });
