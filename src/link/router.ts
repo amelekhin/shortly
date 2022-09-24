@@ -24,7 +24,7 @@ linkRouter
     const links = getAllLinks();
 
     ctx.response.body = `Welcome to ${APP_ORIGIN}!<br/><br/>`;
-    ctx.response.body += links.map((link) => `<a href=${link.originalURL}>${link.shortURL}</a>`).join("<br/>");
+    ctx.response.body += links.map((link) => `<a href=${link.shortURL}>${link.shortURL}</a>`).join("<br/>");
     ctx.response.type = "html";
   })
   .get("/:shortPathname", (ctx) => {
