@@ -1,7 +1,7 @@
 import { Router } from "oak";
 import { getQuery } from "oak/helpers.ts";
 import { APP_ORIGIN } from "../config.ts";
-import { createLink, getAllLinks, getLinkFromShortPathname, getLinkFromShortURL } from "./service.ts";
+import { decodeFromShortPathname, decodeFromShortURL, encodeURL } from "./service.ts";
 
 export type GetOriginalURLResponse = {
   originalURL: string;
@@ -17,28 +17,25 @@ export type CreateLinkResponse = {
   shortURL: string;
 };
 
-export const linkRouter = new Router();
+export const linkRedirectRouter = new Router();
 
-linkRouter
-  .get("/", (ctx) => {
-    const links = getAllLinks();
-
-    ctx.response.body = `Welcome to ${APP_ORIGIN}!<br/><br/>`;
-    ctx.response.body += links.map((link) => `<a href=${link.shortURL}>${link.shortURL}</a>`).join("<br/>");
-    ctx.response.type = "html";
-  })
+linkRedirectRouter
   .get("/:shortPathname", (ctx) => {
     const { shortPathname } = getQuery(ctx, { mergeParams: true });
 
-    const link = getLinkFromShortPathname(shortPathname);
+    const link = decodeFromShortPathname(shortPathname);
     if (link === null) {
       ctx.response.redirect(APP_ORIGIN);
       return;
     }
 
     ctx.response.redirect(link.originalURL);
-  })
-  .get("/api/link/", (ctx) => {
+  });
+
+export const linkAPIRouter = new Router();
+
+linkAPIRouter
+  .get("/decode/", (ctx) => {
     const { shortURL } = getQuery(ctx, { mergeParams: true });
     if (shortURL === null) {
       ctx.response.status = 422;
@@ -47,7 +44,7 @@ linkRouter
       return;
     }
 
-    const link = getLinkFromShortURL(shortURL);
+    const link = decodeFromShortURL(shortURL);
     if (link === null) {
       ctx.response.status = 404;
       ctx.response.body = { message: "Cannot find URL" };
@@ -57,9 +54,9 @@ linkRouter
 
     ctx.response.body = { originalURL: link.originalURL, shortURL } as GetOriginalURLResponse;
   })
-  .post("/api/link/", async (ctx) => {
+  .post("/encode", async (ctx) => {
     const { url } = await ctx.request.body({ type: "json" }).value as CreateLinkRequest;
-    const link = createLink(url);
+    const link = encodeURL(url);
 
     ctx.response.body = { originalURL: link.originalURL, shortURL: link.shortURL } as CreateLinkResponse;
   });

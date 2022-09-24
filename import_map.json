@@ -1,5 +1,7 @@
 {
   "imports": {
+    "/": "./src/",
+    "./": "./",
     "oak": "https://deno.land/x/oak@v11.1.0/mod.ts",
     "oak/": "https://deno.land/x/oak@v11.1.0/",
     "dotenv/": "https://deno.land/x/dotenv@v3.2.0/"
