@@ -1,4 +1,4 @@
-import { APP_ORIGIN } from "/config.ts";
+import { APP_ORIGIN } from "@/config.ts";
 import { Link } from "./domain.ts";
 
 const shortToOriginal = new Map<string, Link>();

@@ -1,6 +1,6 @@
 {
   "imports": {
-    "/": "./src/",
+    "@/": "./src/",
     "./": "./",
     "oak": "https://deno.land/x/oak@v11.1.0/mod.ts",
     "oak/helpers.ts": "https://deno.land/x/oak@v11.1.0/helpers.ts",

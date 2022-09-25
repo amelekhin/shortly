@@ -1,6 +1,6 @@
 import { Application, Router } from "oak";
-import { linkAPIRouter, linkRedirectRouter } from "/link/router.ts";
-import { APP_PORT } from "/config.ts";
+import { linkAPIRouter, linkRedirectRouter } from "@/link/router.ts";
+import { APP_PORT } from "@/config.ts";
 
 const app = new Application();
 
