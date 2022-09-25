@@ -9,7 +9,7 @@ export type GetOriginalURLResponse = {
 };
 
 export type CreateLinkRequest = {
-  url: string;
+  originalURL: string;
 };
 
 export type CreateLinkResponse = {
@@ -55,8 +55,8 @@ linkAPIRouter
     ctx.response.body = { originalURL: link.originalURL, shortURL } as GetOriginalURLResponse;
   })
   .post("/encode", async (ctx) => {
-    const { url } = await ctx.request.body({ type: "json" }).value as CreateLinkRequest;
-    const link = encodeURL(url);
+    const { originalURL } = await ctx.request.body({ type: "json" }).value as CreateLinkRequest;
+    const link = encodeURL(originalURL);
 
     ctx.response.body = { originalURL: link.originalURL, shortURL: link.shortURL } as CreateLinkResponse;
   });
