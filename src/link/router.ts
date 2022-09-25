@@ -4,16 +4,16 @@ import { APP_ORIGIN } from "@/config.ts";
 import { decodeFromShortPathname, decodeFromShortURL, encodeURL } from "./service.ts";
 import { LinkErrorCode } from "./errors.ts";
 
-export type GetOriginalURLResponse = {
+export type EncodeRequest = {
+  originalURL: string;
+};
+
+export type EncodeResponse = {
   originalURL: string;
   shortURL: string;
 };
 
-export type CreateLinkRequest = {
-  originalURL: string;
-};
-
-export type CreateLinkResponse = {
+export type DecodeResponse = {
   originalURL: string;
   shortURL: string;
 };
@@ -38,7 +38,7 @@ export const linkAPIRouter = new Router();
 
 linkAPIRouter
   .post("/encode/", async (ctx) => {
-    const { originalURL } = await ctx.request.body({ type: "json" }).value as CreateLinkRequest;
+    const { originalURL } = await ctx.request.body({ type: "json" }).value as EncodeRequest;
     if (!originalURL) {
       ctx.response.status = Status.BadRequest;
       ctx.response.body = { code: LinkErrorCode.MissingOriginalURL };
@@ -48,7 +48,7 @@ linkAPIRouter
 
     try {
       const link = encodeURL(originalURL);
-      ctx.response.body = { originalURL: link.originalURL, shortURL: link.shortURL } as CreateLinkResponse;
+      ctx.response.body = { originalURL: link.originalURL, shortURL: link.shortURL } as EncodeResponse;
     } catch {
       ctx.response.body = { code: LinkErrorCode.InvalidOriginalURL };
     }
@@ -57,7 +57,7 @@ linkAPIRouter
     const { shortURL } = getQuery(ctx, { mergeParams: true });
     if (shortURL === null) {
       ctx.response.status = Status.BadRequest;
-      ctx.response.body = { code: LinkErrorCode.MissingOriginalURL };
+      ctx.response.body = { code: LinkErrorCode.MissingShortURL };
 
       return;
     }
@@ -79,5 +79,5 @@ linkAPIRouter
       return;
     }
 
-    ctx.response.body = { originalURL: link.originalURL, shortURL } as GetOriginalURLResponse;
+    ctx.response.body = { originalURL: link.originalURL, shortURL } as DecodeResponse;
   });

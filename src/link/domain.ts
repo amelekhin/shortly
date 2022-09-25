@@ -1,5 +1,18 @@
 export class Link {
+  /**
+   * An original URL that needs to be shortened.
+   * Must be compliant with the URL spec.
+   *
+   * @link https://url.spec.whatwg.org/
+   */
   public originalURL: string;
+
+  /**
+   * An shortened URL that redirects to the originalURL.
+   * Must be compliant with the URL spec.
+   *
+   * @link https://url.spec.whatwg.org/
+   */
   public shortURL: string;
 
   public constructor(shortOrigin: string, originalURL: string) {
