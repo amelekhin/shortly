@@ -10,7 +10,7 @@ app.use(responseTime);
 
 const appRouter = new Router();
 appRouter.get("/", (ctx) => {
-  ctx.response.body = "";
+  ctx.response.body = "Welcome to shortly";
 });
 
 const linkRouterV1 = new Router().prefix("/api/v1/link");
