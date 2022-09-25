@@ -29,7 +29,7 @@ export function decodeFromShortURL(shortURL: string): Link | null {
 /**
  * Find a Link instance that corresponds to a given short URL using a generated pathname
  *
- * @param shortURL - a short URL that redirects to the original resource
+ * @param shortURL - a short URL's pathname
  * @returns a Link instance or null if it's not found
  */
 export function decodeFromShortPathname(shortPathname: string): Link | null {
