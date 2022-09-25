@@ -33,6 +33,7 @@ export class Link {
   public static validateURL(url: string): boolean {
     try {
       new URL(url);
+
       return true;
     } catch {
       return false;
@@ -46,8 +47,6 @@ export class Link {
    */
   private static getRandomURL(domain: string): string {
     const pathname = Math.random().toString(36).substring(2);
-
-    console.log(domain, pathname);
 
     return new URL(pathname, domain).toString();
   }
