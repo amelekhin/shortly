@@ -1,6 +1,6 @@
 # Shortly
 
-A small URL shortening service.
+A small URL shortening service. Demo: [shortly.deno.dev](https://shortly.deno.dev).
 
 ## Endpoints
 
