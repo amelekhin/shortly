@@ -1,6 +1,6 @@
 import { Router } from "oak";
 import { getQuery } from "oak/helpers.ts";
-import { APP_ORIGIN } from "../config.ts";
+import { APP_ORIGIN } from "/config.ts";
 import { decodeFromShortPathname, decodeFromShortURL, encodeURL } from "./service.ts";
 
 export type GetOriginalURLResponse = {
