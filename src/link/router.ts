@@ -1,7 +1,7 @@
 import { Router, Status } from "oak";
 import { getQuery } from "oak/helpers.ts";
 import { APP_ORIGIN } from "@/config.ts";
-import { decodeFromShortPathname, decodeFromShortURL, encodeURL } from "./service.ts";
+import { decodeFromShortPathname, decodeFromShortURL, encodeURL, validateURL } from "./service.ts";
 import { LinkErrorCode } from "./errors.ts";
 
 export type EncodeRequest = {
@@ -46,12 +46,15 @@ linkAPIRouter
       return;
     }
 
-    try {
-      const link = encodeURL(originalURL);
-      ctx.response.body = { originalURL: link.originalURL, shortURL: link.shortURL } as EncodeResponse;
-    } catch {
+    if (!validateURL(originalURL)) {
+      ctx.response.status = Status.BadRequest;
       ctx.response.body = { code: LinkErrorCode.InvalidOriginalURL };
+
+      return;
     }
+
+    const link = encodeURL(originalURL);
+    ctx.response.body = { originalURL: link.originalURL, shortURL: link.shortURL } as EncodeResponse;
   })
   .get("/decode/", (ctx) => {
     const { shortURL } = getQuery(ctx, { mergeParams: true });
@@ -62,9 +65,7 @@ linkAPIRouter
       return;
     }
 
-    try {
-      new URL(shortURL);
-    } catch {
+    if (!validateURL(shortURL)) {
       ctx.response.status = Status.BadRequest;
       ctx.response.body = { code: LinkErrorCode.InvalidShortURL };
 
@@ -79,5 +80,5 @@ linkAPIRouter
       return;
     }
 
-    ctx.response.body = { originalURL: link.originalURL, shortURL } as DecodeResponse;
+    ctx.response.body = { originalURL: link.originalURL, shortURL: link.shortURL } as DecodeResponse;
   });

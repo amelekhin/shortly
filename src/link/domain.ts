@@ -15,14 +15,36 @@ export class Link {
    */
   public shortURL: string;
 
-  public constructor(shortOrigin: string, originalURL: string) {
+  /**
+   * @param appOrigin - the full domain of the shortly app, including the protocol part
+   * @param originalURL - a URL that needs to be shortened, expected to be valid
+   */
+  public constructor(appOrigin: string, originalURL: string) {
     this.originalURL = new URL(originalURL).toString();
-    this.shortURL = Link.getRandomUrl(shortOrigin);
-
-    console.log(shortOrigin, originalURL);
+    this.shortURL = Link.getRandomURL(appOrigin);
   }
 
-  private static getRandomUrl(domain: string): string {
+  /**
+   * Check if a string is a valid URL
+   *
+   * @param url - a URL to validate
+   * @returns true if the URL is valid and false otherwise
+   */
+  public static validateURL(url: string): boolean {
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Generate a URL with a random pathname
+   *
+   * @param domain - the full domain of the shortly app, including the protocol part
+   */
+  private static getRandomURL(domain: string): string {
     const pathname = Math.random().toString(36).substring(2);
 
     console.log(domain, pathname);
