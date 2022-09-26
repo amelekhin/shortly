@@ -13,7 +13,7 @@ export type EncodeResponse = {
   shortURL: string;
 };
 
-type DecodeRequest = {
+export type DecodeRequest = {
   shortURL: string;
 };
 
@@ -62,7 +62,7 @@ linkAPIRouter
   })
   .get("/decode/", (ctx) => {
     const { shortURL } = getQuery(ctx, { mergeParams: true }) as DecodeRequest;
-    if (shortURL === null) {
+    if (!shortURL) {
       ctx.response.status = Status.BadRequest;
       ctx.response.body = { code: LinkErrorCode.MissingShortURL };
 

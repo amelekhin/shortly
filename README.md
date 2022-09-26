@@ -52,7 +52,7 @@ Error codes:
 Params:
 
 ```typescript
-type DecodeParams = {
+type DecodeRequest = {
   /**
    * An shortened URL that redirects to the originalURL.
    * Must be compliant with the URL spec.
@@ -66,7 +66,7 @@ type DecodeParams = {
 Response:
 
 ```typescript
-type EncodeResponse = {
+type DecodeResponse = {
   /**
    * An original URL.
    * Must be compliant with the URL spec.
